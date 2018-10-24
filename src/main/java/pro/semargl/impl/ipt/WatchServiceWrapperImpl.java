@@ -7,7 +7,7 @@ import org.springframework.util.MimeTypeUtils;
 import pro.semargl.api.ipt.observer.FileIdentificationObservable;
 import pro.semargl.api.ipt.observer.FileIdentificationObserver;
 import pro.semargl.api.ipt.WatchServiceWrapper;
-import pro.semargl.impl.util.ContentTypeResolver;
+import pro.semargl.util.ContentTypeResolver;
 
 import java.io.IOException;
 import java.nio.file.*;
