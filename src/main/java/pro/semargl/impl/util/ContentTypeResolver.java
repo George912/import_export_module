@@ -1,4 +1,4 @@
-package pro.semargl.util;
+package pro.semargl.impl.util;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;

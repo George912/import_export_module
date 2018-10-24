@@ -1,33 +1,34 @@
-package pro.semargl.ipt;
+package pro.semargl.impl.ipt;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
-import pro.semargl.util.ContentTypeResolver;
+import pro.semargl.api.ipt.observer.FileIdentificationObservable;
+import pro.semargl.api.ipt.observer.FileIdentificationObserver;
+import pro.semargl.api.ipt.WatchServiceWrapper;
+import pro.semargl.impl.util.ContentTypeResolver;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
-/**
- * Implementation file change notification functionality.
- * Responsibility:
- * - file change notification
- * - xmlFilePath spittle
- */
-@Service("watchServiceWrapper")
-public class WatchServiceWrapper {
-    private static final Logger LOGGER = Logger.getLogger(WatchServiceWrapper.class);
+@Service("watchService")
+public class WatchServiceWrapperImpl implements WatchServiceWrapper, FileIdentificationObservable {
+    private static final Logger LOGGER = Logger.getLogger(WatchServiceWrapperImpl.class);
     private WatchService watcher;
     private Path dir;
     private String watchableDirectoryPath;
     private WatchKey key;
     private ContentTypeResolver contentTypeResolver;
+    private List<FileIdentificationObserver> observers;
 
-    public WatchServiceWrapper() {
+    public WatchServiceWrapperImpl() {
+        observers = new ArrayList();
         try {
             watcher = FileSystems.getDefault().newWatchService();
         } catch (IOException e) {
@@ -36,7 +37,7 @@ public class WatchServiceWrapper {
     }
 
     @Autowired
-    public WatchServiceWrapper(ContentTypeResolver contentTypeResolver) {
+    public WatchServiceWrapperImpl(ContentTypeResolver contentTypeResolver) {
         this();
         this.contentTypeResolver = contentTypeResolver;
     }
@@ -80,7 +81,7 @@ public class WatchServiceWrapper {
                 Path filename = ev.context();
                 Path child = dir.resolve(filename);
                 if (contentTypeResolver.isRequiredType(MimeTypeUtils.TEXT_XML_VALUE, child)) {
-                    //todo: call observer method
+                    fileIdentified(child);
                 }
             }
 
@@ -91,12 +92,30 @@ public class WatchServiceWrapper {
         }
     }
 
-    /**
-     * Register required directory path and start watch.
-     */
+    @Override
     public void startWatch() {
         LOGGER.debug("call startWatch()");
         registerPath();
         watch();
+    }
+
+    @Override
+    public void addFileIdentificationObserver(FileIdentificationObserver observer) {
+        LOGGER.debug("call addFileIdentificationObserver(" + observer + ")");
+        if(!observers.contains(observer)){
+            observers.add(observer);
+        }
+    }
+
+    @Override
+    public void removeFileIdentificationObserver(FileIdentificationObserver observer) {
+        LOGGER.debug("call removeFileIdentificationObserver(" + observer + ")");
+        observers.remove(observer);
+    }
+
+    @Override
+    public void fileIdentified(Path filePath) {
+        LOGGER.debug("call fileIdentified(" + filePath + ")");
+        observers.forEach(observer->observer.performImport(filePath));
     }
 }
