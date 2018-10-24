@@ -1,10 +1,22 @@
 package pro.semargl.model;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name = "article")
 public class Article {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, unique = true)
     private long id;
+    @Column(name = "title", nullable = false, length = 200)
     private String title;
+    @Column(name = "description", nullable = false, length = 400)
     private String description;
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "measurement_unit", nullable = false)
     private MeasurementUnit measurementUnit;
+    @Column(name = "weight", nullable = false)
     private double weight;
 
     public Article() {

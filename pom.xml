@@ -25,6 +25,8 @@
         <dependency.slf4j.version>1.7.12</dependency.slf4j.version>
         <dependency.log4j.version>1.2.17</dependency.log4j.version>
         <dependency.spring.version>5.0.8.RELEASE</dependency.spring.version>
+        <dependency.hibernate.version>5.3.6.Final</dependency.hibernate.version>
+        <dependency.postgresql.version>9.1-901.jdbc4</dependency.postgresql.version>
     </properties>
 
     <dependencies>
@@ -60,6 +62,30 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${dependency.spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${dependency.spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${dependency.spring.version}</version>
+        </dependency>
+
+        <!-- hibernate -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${dependency.hibernate.version}</version>
+        </dependency>
+
+        <!-- PostgreSQL JDBC driver -->
+        <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${dependency.postgresql.version}</version>
         </dependency>
     </dependencies>
 
