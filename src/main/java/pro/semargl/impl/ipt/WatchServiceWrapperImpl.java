@@ -5,9 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
+import pro.semargl.api.ipt.WatchServiceWrapper;
 import pro.semargl.api.ipt.observer.FileIdentificationObservable;
 import pro.semargl.api.ipt.observer.FileIdentificationObserver;
-import pro.semargl.api.ipt.WatchServiceWrapper;
 import pro.semargl.util.ContentTypeResolverImpl;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class WatchServiceWrapperImpl implements WatchServiceWrapper, FileIdentif
         try {
             watcher = FileSystems.getDefault().newWatchService();
         } catch (IOException e) {
-            LOGGER.error("Exception while initialization watch service: " + e);
+            LOGGER.error("Exception while initialization watch service: ", e);
         }
     }
 
@@ -66,7 +66,7 @@ public class WatchServiceWrapperImpl implements WatchServiceWrapper, FileIdentif
             try {
                 key = watcher.take();
             } catch (InterruptedException x) {
-                LOGGER.error("Exception while retrieving watch key: " + x);
+                LOGGER.error("Exception while retrieving watch key: ", x);
                 return;
             }
 
@@ -91,8 +91,8 @@ public class WatchServiceWrapperImpl implements WatchServiceWrapper, FileIdentif
     }
 
     @Override
-    public void startWatch() {
-        LOGGER.debug("call startWatch()");
+    public void startWatching() {
+        LOGGER.debug("call startWatching()");
         registerPath();
         watch();
     }
@@ -100,7 +100,7 @@ public class WatchServiceWrapperImpl implements WatchServiceWrapper, FileIdentif
     @Override
     public void addFileIdentificationObserver(FileIdentificationObserver observer) {
         LOGGER.debug("call addFileIdentificationObserver(" + observer + ")");
-        if(!observers.contains(observer)){
+        if (!observers.contains(observer)) {
             observers.add(observer);
         }
     }
@@ -114,6 +114,6 @@ public class WatchServiceWrapperImpl implements WatchServiceWrapper, FileIdentif
     @Override
     public void fileIdentified(Path filePath) {
         LOGGER.debug("call fileIdentified(" + filePath + ")");
-        observers.forEach(observer->observer.performImport(filePath));
+        observers.forEach(observer -> observer.performImport(filePath));
     }
 }

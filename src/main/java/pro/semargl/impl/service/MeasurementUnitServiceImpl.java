@@ -4,15 +4,12 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 import pro.semargl.api.dao.MeasurementUnitDao;
 import pro.semargl.api.service.MeasurementUnitService;
+import pro.semargl.exception.DaoException;
+import pro.semargl.exception.ServiceException;
 import pro.semargl.model.MeasurementUnit;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service("measurementUnitService")
 public class MeasurementUnitServiceImpl implements MeasurementUnitService {
@@ -36,10 +33,15 @@ public class MeasurementUnitServiceImpl implements MeasurementUnitService {
     }
 
     @Override
-    public void saveAll(List<MeasurementUnit> entityList) {
+    public void saveAll(List<MeasurementUnit> entityList) throws ServiceException {
         LOGGER.debug("call saveAll(" + entityList + ")");
         List<MeasurementUnit> measurementUnitListDB = this.findAll();
-        measurementUnitDao.saveAll(mergeData(measurementUnitListDB, entityList));
+        try {
+            measurementUnitDao.saveAll(mergeData(measurementUnitListDB, entityList));
+        } catch (DaoException e) {
+            LOGGER.error("Exception while store entityList: ", e);
+            throw new ServiceException("Exception while store entityList:", e);
+        }
     }
 
     private List<MeasurementUnit> mergeData(List<MeasurementUnit> measurementUnitListDB, List<MeasurementUnit> entityList) {
@@ -51,7 +53,7 @@ public class MeasurementUnitServiceImpl implements MeasurementUnitService {
         //add new values from entityList to resultList
         for (int i = 0; i < entityListCopy.size(); i++) {
             MeasurementUnit measurementUnit = entityListCopy.get(i);
-            if(!resultList.contains(measurementUnit)){
+            if (!resultList.contains(measurementUnit)) {
                 resultList.add(measurementUnit);
             }
         }

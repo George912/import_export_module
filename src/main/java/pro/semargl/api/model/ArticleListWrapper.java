@@ -5,7 +5,7 @@ import pro.semargl.model.Article;
 import java.util.List;
 
 public interface ArticleListWrapper {
-    public List<Article> getArticleList();
+    List<Article> getArticleList();
 
-    public void setArticleList(List<Article> articleList);
+    void setArticleList(List<Article> articleList);
 }

@@ -5,9 +5,11 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.xml.ser.ToXmlGenerator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pro.semargl.api.ept.ExportService;
 import pro.semargl.api.model.ArticleListWrapper;
+import pro.semargl.api.service.ArticleService;
 import pro.semargl.model.Article;
 
 import java.io.File;
@@ -30,9 +32,11 @@ public class ExportServiceImpl implements ExportService {
     private String exportDirectory;
     private static final String DATE_FORMAT = "yyyy-MM-dd";
     private static final String TIME_FORMAT = "HH-mm-ss";
+    private ArticleService articleService;
 
 
-    public ExportServiceImpl(XmlMapper xmlMapper, ArticleListWrapper articleListWrapper) {
+    public ExportServiceImpl(ArticleService articleService, ArticleListWrapper articleListWrapper, XmlMapper xmlMapper) {
+        this.articleService = articleService;
         this.xmlMapper = xmlMapper;
         xmlMapper.configure(ToXmlGenerator.Feature.WRITE_XML_DECLARATION, true);
         xmlMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -40,13 +44,15 @@ public class ExportServiceImpl implements ExportService {
     }
 
     @Override
-    public void export(List<Article> articleList) {
-        LOGGER.debug("call export(" + articleList + ")");
+    @Scheduled(cron = "${cron.export.period}")
+    public void export() {
+        LOGGER.debug("call export()");
+        List<Article> articleList = articleService.findAll();
         articleListWrapper.setArticleList(articleList);
         try {
             xmlMapper.writeValue(new File(buildExportFileName()), articleListWrapper);
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Exception while export performing: ", e);
         }
     }
 
@@ -57,7 +63,6 @@ public class ExportServiceImpl implements ExportService {
         Date date = new Date();
         return new StringBuilder(exportDirectory)
                 .append(exportFilePrefix)
-                .append("_")
                 .append(dateFormat.format(date))
                 .append("_")
                 .append(timeFormat.format(date))

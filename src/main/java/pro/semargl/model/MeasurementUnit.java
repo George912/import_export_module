@@ -1,6 +1,7 @@
 package pro.semargl.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "measurement_unit")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class MeasurementUnit implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE
@@ -22,7 +24,7 @@ public class MeasurementUnit implements Serializable {
     @Column(name = "name", nullable = false, length = 20)
     @JacksonXmlText
     private String name;
-    @OneToMany(mappedBy = "measurementUnit", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "measurementUnit", cascade = CascadeType.ALL)
     @JsonIgnore
     private Set<Article> articleSet = new HashSet<>();
 

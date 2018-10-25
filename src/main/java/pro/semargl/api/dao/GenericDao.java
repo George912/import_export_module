@@ -1,5 +1,7 @@
 package pro.semargl.api.dao;
 
+import pro.semargl.exception.DaoException;
+
 import java.util.List;
 
 /**
@@ -12,5 +14,5 @@ public interface GenericDao<T> {
 
     long save(T entity);
 
-    void saveAll(List<T> entityList);
+    void saveAll(List<T> entityList) throws DaoException;
 }

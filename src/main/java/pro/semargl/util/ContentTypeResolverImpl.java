@@ -24,7 +24,7 @@ public class ContentTypeResolverImpl implements ContentTypeResolver {
                 return true;
             }
         } catch (IOException x) {
-            LOGGER.error("Exception while resolve file content type: " + x);
+            LOGGER.error("Exception while resolve file content type: ", x);
         }
         LOGGER.debug("New file " + filePath + " type is not " + requiredType);
         return false;

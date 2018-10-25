@@ -7,5 +7,5 @@ public interface ImportService {
     /**
      * Start directory watching, xml parsing, store data to database
      */
-    void startImport();
+    void startWatching();
 }

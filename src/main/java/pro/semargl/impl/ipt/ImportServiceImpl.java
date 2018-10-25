@@ -7,7 +7,9 @@ import pro.semargl.api.ipt.WatchServiceWrapper;
 import pro.semargl.api.ipt.observer.FileIdentificationObservable;
 import pro.semargl.api.ipt.observer.FileIdentificationObserver;
 import pro.semargl.api.ipt.parsing.XmlParserService;
+import pro.semargl.api.service.ArticleService;
 import pro.semargl.api.util.FileManagerService;
+import pro.semargl.exception.ServiceException;
 import pro.semargl.model.Article;
 
 import java.nio.file.Path;
@@ -22,26 +24,32 @@ public class ImportServiceImpl implements ImportService, FileIdentificationObser
     private WatchServiceWrapper watchService;
     private XmlParserService xmlParserService;
     private FileManagerService fileManagerService;
+    private ArticleService articleService;
 
-    public ImportServiceImpl(WatchServiceWrapper watchService, XmlParserService xmlParserService, FileManagerService fileManagerService) {
+    public ImportServiceImpl(WatchServiceWrapper watchService, XmlParserService xmlParserService, FileManagerService fileManagerService, ArticleService articleService) {
         this.watchService = watchService;
         this.xmlParserService = xmlParserService;
         this.fileManagerService = fileManagerService;
+        this.articleService = articleService;
     }
 
     @Override
     public void performImport(Path filePath) {
         LOGGER.debug("performImport(" + filePath + ")");
         List<Article> articleList = xmlParserService.parse(filePath);
-        //todo: use services, execute fileManagerService
-        fileManagerService.move(filePath);
-//        fileManagerService.remove(filePath);
+        try {
+            articleService.saveAll(articleList);
+            fileManagerService.remove(filePath);
+        } catch (ServiceException e) {
+            LOGGER.error("Exception while import performing: ", e);
+            fileManagerService.move(filePath);
+        }
     }
 
     @Override
-    public void startImport() {
-        LOGGER.debug("startImport");
+    public void startWatching() {
+        LOGGER.debug("startWatching");
         ((FileIdentificationObservable) watchService).addFileIdentificationObserver(this);
-        watchService.startWatch();
+        watchService.startWatching();
     }
 }

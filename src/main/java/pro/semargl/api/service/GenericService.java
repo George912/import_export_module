@@ -1,5 +1,7 @@
 package pro.semargl.api.service;
 
+import pro.semargl.exception.ServiceException;
+
 import java.util.List;
 
 /**
@@ -12,5 +14,5 @@ public interface GenericService<T> {
 
     long save(T entity);
 
-    void saveAll(List<T> entityList);
+    void saveAll(List<T> entityList) throws ServiceException;
 }

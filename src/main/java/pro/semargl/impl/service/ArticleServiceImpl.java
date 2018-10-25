@@ -5,8 +5,9 @@ import org.springframework.stereotype.Service;
 import pro.semargl.api.dao.ArticleDao;
 import pro.semargl.api.service.ArticleService;
 import pro.semargl.api.service.MeasurementUnitService;
+import pro.semargl.exception.DaoException;
+import pro.semargl.exception.ServiceException;
 import pro.semargl.model.Article;
-import pro.semargl.model.MeasurementUnit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,12 +38,17 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void saveAll(List<Article> entityList) {
+    public void saveAll(List<Article> entityList) throws ServiceException {
         LOGGER.debug("call saveAll(" + entityList + ")");
 //        measurementUnitService.saveAll(entityList.stream()
 //                .map(article -> article.getMeasurementUnit())
 //                .collect(Collectors.toList()));
-        articleDao.saveAll(mergeData(findAll(), entityList));
+        try {
+            articleDao.saveAll(mergeData(findAll(), entityList));
+        } catch (DaoException e) {
+            LOGGER.error("Exception while store entityList: ", e);
+            throw new ServiceException("Exception while store entityList:", e);
+        }
     }
 
     private List<Article> mergeData(List<Article> measurementUnitListDB, List<Article> entityList) {
@@ -54,7 +60,7 @@ public class ArticleServiceImpl implements ArticleService {
         //add new values from entityList to resultList
         for (int i = 0; i < entityListCopy.size(); i++) {
             Article article = entityListCopy.get(i);
-            if(!resultList.contains(article)){
+            if (!resultList.contains(article)) {
                 resultList.add(article);
             }
         }
@@ -64,7 +70,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .stream().collect(Collectors.toMap(Article::getTitle, Function.identity()));
         entityListCopy.forEach(article -> {
             String articleTitle = article.getTitle();
-            if(articleMap.containsKey(articleTitle)){
+            if (articleMap.containsKey(articleTitle)) {
                 Article updatableArticle = articleMap.get(articleTitle);
                 updatableArticle.setDescription(article.getDescription());
                 updatableArticle.setMeasurementUnit(article.getMeasurementUnit());

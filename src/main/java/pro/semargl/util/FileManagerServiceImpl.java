@@ -24,7 +24,7 @@ public class FileManagerServiceImpl implements FileManagerService {
         try {
             Files.move(filePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            LOGGER.error("Exception while file moving: " + e);
+            LOGGER.error("Exception while file moving: ", e);
         }
     }
 
@@ -34,7 +34,7 @@ public class FileManagerServiceImpl implements FileManagerService {
         try {
             Files.delete(filePath);
         } catch (IOException e) {
-            LOGGER.error("Exception while file removing: " + e);
+            LOGGER.error("Exception while file removing: ", e);
         }
     }
 }
