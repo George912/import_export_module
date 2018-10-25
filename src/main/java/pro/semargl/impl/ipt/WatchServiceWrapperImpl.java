@@ -2,6 +2,7 @@ package pro.semargl.impl.ipt;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 import pro.semargl.api.ipt.observer.FileIdentificationObservable;
@@ -22,7 +23,8 @@ public class WatchServiceWrapperImpl implements WatchServiceWrapper, FileIdentif
     private static final Logger LOGGER = Logger.getLogger(WatchServiceWrapperImpl.class);
     private WatchService watcher;
     private Path dir;
-    private String watchableDirectoryPath;
+    @Value("${import.directory}")
+    private String importDirectoryPath;
     private WatchKey key;
     private ContentTypeResolverImpl contentTypeResolver;
     private List<FileIdentificationObserver> observers;
@@ -42,16 +44,12 @@ public class WatchServiceWrapperImpl implements WatchServiceWrapper, FileIdentif
         this.contentTypeResolver = contentTypeResolver;
     }
 
-    public void setWatchableDirectoryPath(String watchableDirectoryPath) {
-        this.watchableDirectoryPath = watchableDirectoryPath;
-    }
-
     /**
      * Register directory path for watch.
      */
     private void registerPath() {
         LOGGER.debug("call registerPath()");
-        dir = Paths.get(watchableDirectoryPath);
+        dir = Paths.get(importDirectoryPath);
         try {
             key = dir.register(watcher, ENTRY_CREATE);
         } catch (IOException x) {

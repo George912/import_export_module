@@ -57,18 +57,17 @@ public class MeasurementUnitServiceImpl implements MeasurementUnitService {
         }
 
         //update exist objects if name is same
-        Map<String, MeasurementUnit> measurementUnitMap = resultList
-                .stream().collect(Collectors.toMap(MeasurementUnit::getName, Function.identity()));
-        entityListCopy.forEach(measurementUnit -> {
-            String measurementUnitName = measurementUnit.getName();
-            if(measurementUnitMap.containsKey(measurementUnitName)){
-                MeasurementUnit updatableMeasurementUnit = measurementUnitMap.get(measurementUnitName);
-                updatableMeasurementUnit.setName(measurementUnit.getName());
-                updatableMeasurementUnit.setArticleSet(measurementUnit.getArticleSet());
-            }
-        });
-        resultList.clear();
-        resultList.addAll(measurementUnitMap.values());
+//        Map<String, MeasurementUnit> measurementUnitMap = resultList
+//                .stream().collect(Collectors.toMap(MeasurementUnit::getName, Function.identity()));
+//        entityListCopy.forEach(measurementUnit -> {
+//            String measurementUnitName = measurementUnit.getName();
+//            if(measurementUnitMap.containsKey(measurementUnitName)){
+//                MeasurementUnit updatableMeasurementUnit = measurementUnitMap.get(measurementUnitName);
+//                updatableMeasurementUnit.setName(measurementUnit.getName());
+//            }
+//        });
+//        resultList.clear();
+//        resultList.addAll(measurementUnitMap.values());
         return resultList;
     }
 }

@@ -39,9 +39,9 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void saveAll(List<Article> entityList) {
         LOGGER.debug("call saveAll(" + entityList + ")");
-        measurementUnitService.saveAll(entityList.stream()
-                .map(article -> article.getMeasurementUnit())
-                .collect(Collectors.toList()));
+//        measurementUnitService.saveAll(entityList.stream()
+//                .map(article -> article.getMeasurementUnit())
+//                .collect(Collectors.toList()));
         articleDao.saveAll(mergeData(findAll(), entityList));
     }
 

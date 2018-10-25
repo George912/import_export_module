@@ -41,8 +41,6 @@ public class ImportServiceImpl implements ImportService, FileIdentificationObser
     @Override
     public void startImport() {
         LOGGER.debug("startImport");
-        //todo: get from property file
-        watchService.setWatchableDirectoryPath("F:\\Git\\github\\semargl\\import_export_module\\tmp");
         ((FileIdentificationObservable) watchService).addFileIdentificationObserver(this);
         watchService.startWatch();
     }

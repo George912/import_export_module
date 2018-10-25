@@ -24,7 +24,7 @@ public class Article implements Serializable {
     @Column(name = "description", nullable = false, length = 400)
     @JacksonXmlProperty(localName = "Description")
     private String description;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "measurement_unit")
     @JacksonXmlProperty(localName = "UnitOfMeasurement")
     private MeasurementUnit measurementUnit;

@@ -8,6 +8,4 @@ public interface WatchServiceWrapper {
      * Register required directory path and start watch.
      */
     void startWatch();
-
-    void setWatchableDirectoryPath(String watchableDirectoryPath);
 }

@@ -1,7 +1,6 @@
 package pro.semargl.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 
 import javax.persistence.*;
@@ -16,8 +15,8 @@ public class MeasurementUnit implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE
             , generator = "measurement_unit_sequence_generator")
     @SequenceGenerator(name = "measurement_unit_sequence_generator"
-            ,sequenceName = "measurement_unit_sequence"
-            ,allocationSize = 1)
+            , sequenceName = "measurement_unit_sequence"
+            , allocationSize = 1)
     @JsonIgnore
     private Long id;
     @Column(name = "name", nullable = false, length = 20)
