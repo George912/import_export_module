@@ -5,40 +5,40 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import pro.semargl.api.dao.MeasurementUnitDao;
-import pro.semargl.model.MeasurementUnit;
+import pro.semargl.api.dao.ArticleDao;
+import pro.semargl.model.Article;
 
 import java.util.List;
 
 @Transactional
-@Repository("measurementUnitDao")
-public class MeasurementUnitDaoImpl implements MeasurementUnitDao {
-    private static final Logger LOGGER = Logger.getLogger(MeasurementUnitDaoImpl.class);
+@Repository("articleDao")
+public class ArticleDaoImpl implements ArticleDao {
+    private static final Logger LOGGER = Logger.getLogger(ArticleDaoImpl.class);
     private SessionFactory sessionFactory;
     //todo: load from config.properties
     private int batchSize = 5;
 
-    public MeasurementUnitDaoImpl(SessionFactory sessionFactory) {
+    public ArticleDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
     @Override
-    public List<MeasurementUnit> findAll() {
+    public List<Article> findAll() {
         return sessionFactory.getCurrentSession()
-                .createQuery("from MeasurementUnit mu")
+                .createQuery("from Article a")
                 .list();
     }
 
     @Override
-    public long save(MeasurementUnit measurementUnit) {
-        LOGGER.debug("call save(" + measurementUnit + ")");
-        sessionFactory.getCurrentSession().saveOrUpdate(measurementUnit);
-        LOGGER.debug("Measurement unit saved with id: " + measurementUnit.getId());
-        return measurementUnit.getId();
+    public long save(Article article) {
+        LOGGER.debug("call save(" + article + ")");
+        sessionFactory.getCurrentSession().saveOrUpdate(article);
+        LOGGER.debug("Article saved with id: " + article.getId());
+        return article.getId();
     }
 
     @Override
-    public void saveAll(List<MeasurementUnit> entityList) {
+    public void saveAll(List<Article> entityList) {
         LOGGER.debug("call saveAll(" + entityList + ")");
         Session session = sessionFactory.getCurrentSession();
         for (int i = 0; i <= entityList.size(); i++) {

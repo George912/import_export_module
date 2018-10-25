@@ -1,13 +1,13 @@
-package pro.semargl.api.dao;
+package pro.semargl.api.service;
 
 import java.util.List;
 
 /**
- * Base dao contain common operations for all entities
+ * Base service contain common operations for all entities
  *
  * @param <T>
  */
-public interface GenericDao<T> {
+public interface GenericService<T> {
     List<T> findAll();
 
     long save(T entity);

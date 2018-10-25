@@ -1,15 +1,20 @@
 package pro.semargl.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "measurement_unit")
-public class MeasurementUnit {
+public class MeasurementUnit implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE
+            , generator = "measurement_unit_sequence_generator")
+    @SequenceGenerator(name = "measurement_unit_sequence_generator"
+            ,sequenceName = "measurement_unit_sequence"
+            ,allocationSize = 1)
+    private Long id;
     @Column(name = "name", nullable = false, length = 20)
     private String name;
     @OneToMany(mappedBy = "measurementUnit", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -23,6 +28,18 @@ public class MeasurementUnit {
         this.name = name;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -33,6 +50,21 @@ public class MeasurementUnit {
 
     public void setArticleSet(Set<Article> articleSet) {
         this.articleSet = articleSet;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MeasurementUnit)) return false;
+
+        MeasurementUnit that = (MeasurementUnit) o;
+
+        return getName().equals(that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return getName().hashCode();
     }
 
     @Override

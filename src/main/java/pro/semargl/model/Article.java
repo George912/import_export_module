@@ -1,20 +1,25 @@
 package pro.semargl.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "article")
-public class Article {
+public class Article implements Serializable{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE
+            , generator = "article_sequence_generator")
+    @SequenceGenerator(name = "article_sequence_generator"
+            ,sequenceName = "article_sequence"
+            ,allocationSize = 1)
     @Column(nullable = false, unique = true)
     private long id;
     @Column(name = "title", nullable = false, length = 200)
     private String title;
     @Column(name = "description", nullable = false, length = 400)
     private String description;
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    @JoinColumn(name = "measurement_unit", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "measurement_unit")
     private MeasurementUnit measurementUnit;
     @Column(name = "weight", nullable = false)
     private double weight;
@@ -28,6 +33,10 @@ public class Article {
         this.description = description;
         this.measurementUnit = measurementUnit;
         this.weight = weight;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public void setTitle(String title) {
@@ -44,6 +53,37 @@ public class Article {
 
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    public MeasurementUnit getMeasurementUnit() {
+        return measurementUnit;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Article)) return false;
+
+        Article article = (Article) o;
+
+        return getTitle().equals(article.getTitle());
+    }
+
+    @Override
+    public int hashCode() {
+        return getTitle().hashCode();
     }
 
     @Override
