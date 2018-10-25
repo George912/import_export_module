@@ -1,27 +1,35 @@
 package pro.semargl.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "article")
-public class Article implements Serializable{
+public class Article implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE
             , generator = "article_sequence_generator")
     @SequenceGenerator(name = "article_sequence_generator"
-            ,sequenceName = "article_sequence"
-            ,allocationSize = 1)
+            , sequenceName = "article_sequence"
+            , allocationSize = 1)
     @Column(nullable = false, unique = true)
+    @JsonIgnore
     private long id;
     @Column(name = "title", nullable = false, length = 200)
+    @JacksonXmlProperty(localName = "Title")
     private String title;
     @Column(name = "description", nullable = false, length = 400)
+    @JacksonXmlProperty(localName = "Description")
     private String description;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "measurement_unit")
+    @JacksonXmlProperty(localName = "UnitOfMeasurement")
     private MeasurementUnit measurementUnit;
     @Column(name = "weight", nullable = false)
+    @JacksonXmlProperty(localName = "Weight")
     private double weight;
 
     public Article() {

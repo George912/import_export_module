@@ -6,7 +6,9 @@
             http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/context
             http://www.springframework.org/schema/context/spring-context.xsd">
-    <import resource="datasource.xml" />
+    <import resource="datasource.xml"/>
     <context:component-scan base-package="pro.semargl.impl;
-                                            pro.semargl.util"/>
+                                            pro.semargl.util;
+                                            pro.semargl.model"/>
+    <bean id="xmlMapper" class="com.fasterxml.jackson.dataformat.xml.XmlMapper"/>
 </beans>

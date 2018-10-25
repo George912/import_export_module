@@ -27,6 +27,7 @@
         <dependency.spring.version>5.0.8.RELEASE</dependency.spring.version>
         <dependency.hibernate.version>5.3.6.Final</dependency.hibernate.version>
         <dependency.postgresql.version>9.1-901.jdbc4</dependency.postgresql.version>
+        <dependency.jackson.version>2.9.4</dependency.jackson.version>
     </properties>
 
     <dependencies>
@@ -86,6 +87,13 @@
             <groupId>postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${dependency.postgresql.version}</version>
+        </dependency>
+
+        <!-- Jackson -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
+            <version>${dependency.jackson.version}</version>
         </dependency>
     </dependencies>
 

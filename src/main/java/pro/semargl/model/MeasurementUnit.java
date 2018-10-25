@@ -1,5 +1,9 @@
 package pro.semargl.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -14,10 +18,13 @@ public class MeasurementUnit implements Serializable {
     @SequenceGenerator(name = "measurement_unit_sequence_generator"
             ,sequenceName = "measurement_unit_sequence"
             ,allocationSize = 1)
+    @JsonIgnore
     private Long id;
     @Column(name = "name", nullable = false, length = 20)
+    @JacksonXmlText
     private String name;
     @OneToMany(mappedBy = "measurementUnit", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private Set<Article> articleSet = new HashSet<>();
 
     public MeasurementUnit() {
