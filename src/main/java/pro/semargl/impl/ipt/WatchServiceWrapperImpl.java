@@ -7,7 +7,7 @@ import org.springframework.util.MimeTypeUtils;
 import pro.semargl.api.ipt.observer.FileIdentificationObservable;
 import pro.semargl.api.ipt.observer.FileIdentificationObserver;
 import pro.semargl.api.ipt.WatchServiceWrapper;
-import pro.semargl.util.ContentTypeResolver;
+import pro.semargl.util.ContentTypeResolverImpl;
 
 import java.io.IOException;
 import java.nio.file.*;
@@ -24,7 +24,7 @@ public class WatchServiceWrapperImpl implements WatchServiceWrapper, FileIdentif
     private Path dir;
     private String watchableDirectoryPath;
     private WatchKey key;
-    private ContentTypeResolver contentTypeResolver;
+    private ContentTypeResolverImpl contentTypeResolver;
     private List<FileIdentificationObserver> observers;
 
     public WatchServiceWrapperImpl() {
@@ -37,7 +37,7 @@ public class WatchServiceWrapperImpl implements WatchServiceWrapper, FileIdentif
     }
 
     @Autowired
-    public WatchServiceWrapperImpl(ContentTypeResolver contentTypeResolver) {
+    public WatchServiceWrapperImpl(ContentTypeResolverImpl contentTypeResolver) {
         this();
         this.contentTypeResolver = contentTypeResolver;
     }
