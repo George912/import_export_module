@@ -12,6 +12,7 @@ import pro.semargl.exception.DaoException;
 import pro.semargl.model.Article;
 
 import java.util.List;
+import java.util.Set;
 
 @Transactional
 @Repository("articleDao")
@@ -33,44 +34,19 @@ public class ArticleDaoImpl implements ArticleDao {
     }
 
     @Override
-    public long save(Article article) {
-        LOGGER.debug("call save(" + article + ")");
-        sessionFactory.getCurrentSession().saveOrUpdate(article);
-        LOGGER.debug("Article saved with id: " + article.getId());
-        return article.getId();
-    }
-
-    @Override
-    public void saveAll(List<Article> entityList) throws DaoException {
-        LOGGER.debug("call saveAll(" + entityList + ")");
+    public void saveAll(Set<Article> entitySet) throws DaoException {
+        LOGGER.debug("call saveAll(" + entitySet + ")");
         Session session;
         try {
             session = sessionFactory.getCurrentSession();
-            for (int i = 0; i <= entityList.size(); i++) {
-                if (i > 0) {
-                    if ((i % batchSize == 0)
-                            || ((i == entityList.size()) && (i <= batchSize))) {
-                        session.flush();
-                        session.clear();
-                        if (i == entityList.size()) {
-                            continue;
-                        }
-                    }
-                }
-                session.saveOrUpdate(entityList.get(i));
-
-//                if ((i > 0) && (i % batchSize == 0)) {
-//                    session.flush();
-//                    session.clear();
-//                    if (i == entityList.size()) {
-//                        continue;
-//                    }
-//                }
-//                session.saveOrUpdate(entityList.get(i));
-            }
+            entitySet.forEach(article ->
+                    session.saveOrUpdate(article)
+            );
+            session.flush();
+            session.clear();
         } catch (HibernateException e) {
-            LOGGER.error("Exception while store entityList: ", e);
-            throw new DaoException("Exception while store entityList: ", e);
+            LOGGER.error("Exception while store entity set: ", e);
+            throw new DaoException("Exception while store entity set: ", e);
         }
     }
 }

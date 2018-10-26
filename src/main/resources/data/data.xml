@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<articles>
+	<article>
+		<Title>АН-00981</Title>
+		<Description>Шайба 8</Description>
+		<UnitOfMeasurement>Штука</UnitOfMeasurement>
+		<Weight>20.0</Weight>
+	</article>
+	<article>
+		<Title>АН-06263</Title>
+		<Description>Болт 60х8</Description>
+		<UnitOfMeasurement>Штука</UnitOfMeasurement>
+		<Weight>60.0</Weight>
+	</article>
+	<article>
+		<Title>АН-02501</Title>
+		<Description>Провод ПВС 3х2.5 белый НКЗ ГОСТ</Description>
+		<UnitOfMeasurement>Метр</UnitOfMeasurement>
+		<Weight>500.0</Weight>
+	</article>
+	<article>
+		<Title>АН-02503</Title>
+		<Description>АН-02503	Мало машинное</Description>
+		<UnitOfMeasurement>Литр</UnitOfMeasurement>
+		<Weight>5.0</Weight>
+	</article>
+</articles>

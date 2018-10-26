@@ -24,7 +24,7 @@ public class MeasurementUnit implements Serializable {
     @Column(name = "name", nullable = false, length = 20)
     @JacksonXmlText
     private String name;
-    @OneToMany(mappedBy = "measurementUnit", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "measurementUnit")
     @JsonIgnore
     private Set<Article> articleSet = new HashSet<>();
 

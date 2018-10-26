@@ -3,6 +3,7 @@ package pro.semargl.api.dao;
 import pro.semargl.exception.DaoException;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Base dao contain common operations for all entities
@@ -12,7 +13,5 @@ import java.util.List;
 public interface GenericDao<T> {
     List<T> findAll();
 
-    long save(T entity);
-
-    void saveAll(List<T> entityList) throws DaoException;
+    void saveAll(Set<T> entitySet) throws DaoException;
 }

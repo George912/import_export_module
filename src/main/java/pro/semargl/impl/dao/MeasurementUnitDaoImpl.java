@@ -12,6 +12,7 @@ import pro.semargl.exception.DaoException;
 import pro.semargl.model.MeasurementUnit;
 
 import java.util.List;
+import java.util.Set;
 
 @Transactional
 @Repository("measurementUnitDao")
@@ -33,32 +34,19 @@ public class MeasurementUnitDaoImpl implements MeasurementUnitDao {
     }
 
     @Override
-    public long save(MeasurementUnit measurementUnit) {
-        LOGGER.debug("call save(" + measurementUnit + ")");
-        sessionFactory.getCurrentSession().saveOrUpdate(measurementUnit);
-        LOGGER.debug("Measurement unit saved with id: " + measurementUnit.getId());
-        return measurementUnit.getId();
-    }
-
-    @Override
-    public void saveAll(List<MeasurementUnit> entityList) throws DaoException {
-        LOGGER.debug("call saveAll(" + entityList + ")");
+    public void saveAll(Set<MeasurementUnit> entitySet) throws DaoException {
+        LOGGER.debug("call saveAll(" + entitySet + ")");
         Session session;
         try {
             session = sessionFactory.getCurrentSession();
-            for (int i = 0; i <= entityList.size(); i++) {
-                if ((i > 0) && (i % batchSize == 0)) {
-                    session.flush();
-                    session.clear();
-                    if (i == entityList.size()) {
-                        continue;
-                    }
-                }
-                session.saveOrUpdate(entityList.get(i));
-            }
+            entitySet.forEach(measurementUnit ->
+                session.saveOrUpdate(measurementUnit)
+            );
+            session.flush();
+            session.clear();
         } catch (HibernateException e) {
-            LOGGER.error("Exception while store entityList: ", e);
-            throw new DaoException("Exception while store entityList: ", e);
+            LOGGER.error("Exception while store entity set: ", e);
+            throw new DaoException("Exception while store entity set: ", e);
         }
 
     }

@@ -14,6 +14,7 @@ import pro.semargl.model.Article;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Import functionality.
@@ -38,7 +39,7 @@ public class ImportServiceImpl implements ImportService, FileIdentificationObser
         LOGGER.debug("performImport(" + filePath + ")");
         List<Article> articleList = xmlParserService.parse(filePath);
         try {
-            articleService.saveAll(articleList);
+            articleService.saveAll(articleList.stream().collect(Collectors.toSet()));
             fileManagerService.remove(filePath);
         } catch (ServiceException e) {
             LOGGER.error("Exception while import performing: ", e);

@@ -3,6 +3,7 @@ package pro.semargl.api.service;
 import pro.semargl.exception.ServiceException;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Base service contain common operations for all entities
@@ -12,7 +13,5 @@ import java.util.List;
 public interface GenericService<T> {
     List<T> findAll();
 
-    long save(T entity);
-
-    void saveAll(List<T> entityList) throws ServiceException;
+    void saveAll(Set<T> entitySet) throws ServiceException;
 }
